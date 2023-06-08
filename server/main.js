@@ -1,38 +1,38 @@
 import { Server } from "socket.io";
 import cron from "node-cron";
+import { v4 as uuidv4 } from 'uuid';
 import weather from "./weather.js";
 
-const io = new Server()
+const io = new Server({
+  cors: {
+    origin: "http://localhost:6969"
+  }
+});
 
 let cache = {
   weather: {},
   radar: {},
+  messages: [],
 }
 
 // Socket.io connection event
 io.on('connection', (socket) => {
-  console.log('A user connected');
-
-  // Socket.io message event
+  console.log("Client connected!")
   socket.on('message', (data) => {
-    console.log('Message received:', data);
-    // Broadcast the message to all connected clients
-    socket.emit('message', socket.conn.remoteAddress);
+    //validate(data)
+    io.emit('message', {uuid: uuidv4(), username: "TODO", time: new Date(), text: data, image: undefined});
   });
 
-  // Socket.io disconnect event
   socket.on('disconnect', () => {
-    console.log('A user disconnected');
   });
 });
 
-// Start the server
-const port = 3000;
-io.listen(port);
-console.log(`Server listening on port ${port}`);
-
-weather()
-
-cron.schedule("0 * * * *", ()=>{
-
-})
+io.listen(3000);
+console.log("Started!")
+// weather().then((data)=>{
+//   console.log(data)
+// })
+//
+// cron.schedule("0 * * * *", ()=>{
+//
+// })
