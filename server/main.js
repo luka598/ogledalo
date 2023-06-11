@@ -20,7 +20,7 @@ io.on('connection', (socket) => {
   console.log("Client connected!")
   socket.on('message', (data) => {
     //validate(data)
-    io.emit('message', {uuid: uuidv4(), username: "TODO", time: new Date(), text: data, image: undefined});
+    io.emit('message', {uuid: uuidv4(), username: data.username, time: new Date(), text: data.text, image: undefined});
   });
 
   socket.on('disconnect', () => {

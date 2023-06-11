@@ -28,7 +28,7 @@ const rl = readline.createInterface({
 const repl = () => {
   rl.question('>> ', (input) => {
     repl()
-    socket.emit('message', input)
+    socket.emit('message', {username: "Client", text: input})
   });
 }
 repl()
