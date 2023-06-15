@@ -8,13 +8,11 @@ socket.on('connect', () => {
   console.log('Connected to server');
 });
 
-socket.on('message', (data) => {
-  console.log('Received message:', data);
-});
+socket.on('message', (data) => console.log('Received message:', data));
 
-socket.on('messages', (data) => {
-  console.log(data);
-});
+socket.on('messages', console.log);
+
+socket.on('weather', console.log);
 
 socket.on('disconnect', () => {
   console.log('Disconnected from server');

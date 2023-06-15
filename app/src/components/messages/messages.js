@@ -41,10 +41,9 @@ export default function() {
             break
           }
         }
-        console.log(m)
         return m
       })
-    }, 10000)
+    }, 100)
     return ()=>clearInterval(interval);
   }, [])
 
@@ -67,7 +66,7 @@ export default function() {
           }
         )}
         >
-        <Message username={m.username} time={m.time} text={m.text + (index)}/>
+        <Message username={m.username} time={m.time} text={m.text}/>
         </div>
       ))
     }</div>

@@ -36,7 +36,7 @@ function timeAgo(time){
 
 export default function(props){
   return (
-    <Floating className="w-60 h-[4rem] items-center">
+    <Floating className={"w-60 h-[4rem] items-center " + props.className}>
     <div className="flex">    
     <h5 className="">{props.username}</h5>
     <h6 className="ml-auto text-sm text-zinc-700">{ timeAgo(props.time) }</h6>

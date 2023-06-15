@@ -18,8 +18,11 @@ let cache = {
 // Socket.io connection event
 io.on('connection', (socket) => {
   console.log("Client connected!")
+  io.emit('weather', cache.weather)
+
   socket.on('message', (data) => {
     //validate(data)
+    if (data.text == ".weather") {io.emit('weather', cache.weather)}
     io.emit('message', {uuid: uuidv4(), username: data.username, time: new Date(), text: data.text, image: undefined});
   });
 
@@ -29,10 +32,15 @@ io.on('connection', (socket) => {
 
 io.listen(3000);
 console.log("Started!")
-// weather().then((data)=>{
-//   console.log(data)
-// })
-//
-// cron.schedule("0 * * * *", ()=>{
-//
-// })
+
+weather().then((data)=>{
+  cache.weather = data
+  console.log(data)
+})
+
+cron.schedule("0 * * * *", ()=>{
+  weather().then((data)=>{
+    cache.weather = data
+    io.emit('weather', data)
+  })
+})
