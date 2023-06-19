@@ -17,7 +17,7 @@ export default function Clock(props) {
         seconds: pad(date.getSeconds(), 2),
         ms: pad(date.getMilliseconds(), 3)
       })
-    }, 1000)
+    }, 11)
   }, [clock])
 
   return (

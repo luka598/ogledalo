@@ -1,5 +1,4 @@
-import React, {useState, useEffect, useRef} from "react"
-import classNames from "classnames"
+import React, {useEffect, useRef} from "react"
 import Webcam from "react-webcam"
 import { socket } from "src/socket.js";
 

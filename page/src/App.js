@@ -4,7 +4,6 @@ import { socket } from "src/socket.js";
 
 import Messages from "./components/messages/messages.js"
 import Clock from "./components/clock.js"
-import Radar from "./components/radar.js"
 import Weather from "./components/weather/weather.js"
 import Webcam from './components/Webcam.js'
 
@@ -23,12 +22,12 @@ function App() {
   }, [])
 
   useEffect(() => {
-      socket.on('movement', (data) => {
-        setAwakeTimeout((old) => Math.min(old+1, 10))
+      socket.on('movement', () => {
+        setAwakeTimeout((old) => Math.min(old+10, 30))
       })
 
       return () => {
-        socket.off('weather')
+        socket.off('movement')
       }
     }, [])
 
@@ -39,7 +38,7 @@ function App() {
   return (
     <div className="w-screen h-screen bg-black relative overflow-hidden">
       <Webcam className="absolute right-3 top-3" />
-      <button className="bg-blue-500 text-white shadow shadow-blue-400 rounded m-1 p-1 absolute bottom-0" onClick={() => setAwakeTimeout(awakeTimeout + 10)}>Add ({awakeTimeout})</button>
+      <div className="bg-zinc-700 text-white shadow shadow-zinc-600 rounded m-1 p-1 absolute right-0 opacity-5">xxx.xxx.xxx.xxx http(6969) socketIO(3000) ({awakeTimeout})</div>
 
       <div className={classNames(
         "inline-block absolute transition-all duration-1000 left-1/2 -translate-x-1/2",
@@ -65,7 +64,7 @@ function App() {
         "inline-block absolute transition-all duration-1000 top-1/2 -translate-y-1/2",
         {
           "left-full": !awake(),
-          "left-3/4 -translate-x-1/2 scale-[1]": awake(),
+          "left-[85%] -translate-x-1/2 scale-[1]": awake(),
         }
       )}>
         <Messages />
