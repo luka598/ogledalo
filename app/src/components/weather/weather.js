@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React, { useState, useEffect } from "react"
 import classNames from "classnames"
 import { socket } from "src/socket.js";
 
@@ -51,22 +51,22 @@ const wmosTsvg = {
   // Thunderstorm
   11: Thunderstorm,
   // Hail
-  12: Thunderstorm
+  12: Hail
 }
 
 const dateFormat = (date) => (date.getDate().toString().padStart(2, "0") + "/" + date.getMonth().toString().padStart(2, "0"))
 
-export default function(props) {
+export default function Weather(props) {
   const [weather, setWeather] = useState(undefined)
 
 
-  useEffect(()=>{
+  useEffect(() => {
     socket.on('weather', (data) => {
       console.log(data)
       setWeather(data)
     })
 
-    return ()=>{
+    return () => {
       socket.off('weather')
     }
   }, [])
@@ -74,30 +74,34 @@ export default function(props) {
   return weather ?
     (
       <div className={classNames("text-white", props.className)}>
-      <div className="flex justify-center">
-      <img src={wmosTsvg[weather.now.wmos]} width={SIZE_LARGE} height={SIZE_LARGE} />
-      <div className="pt-1 pb-1 flex flex-col align-center text-xs">
-      <div className="flex"><img src={Thermometer} width={SIZE_SMALL}/>{weather.now.temperature} °C</div>
-      <div className="flex"><img src={Wind} width={SIZE_SMALL}/>{weather.now.windSpeed} km/h</div>
-      </div>
-      </div>
-      <div className="flex border-[0.5px] border-zinc-900 rounded p-0.5 gap-1">
+        <div className="flex justify-center">
+          <img src={wmosTsvg[weather.now.wmos]} width={SIZE_LARGE} height={SIZE_LARGE} alt="Weather icon" />
+          <div className="pt-1 pb-1 flex flex-col align-center text-xs">
+            <div className="flex">
+              <img src={Thermometer} width={SIZE_SMALL} alt="Thermometer icon"/>{weather.now.temperature} °C
+            </div>
+            <div className="flex">
+              <img src={Wind} width={SIZE_SMALL} alt="Wind icon"/>{weather.now.windSpeed} km/h
+            </div>
+          </div>
+        </div>
+        <div className="flex border-[0.5px] border-zinc-900 rounded p-0.5 gap-1">
 
-      {
-        weather.future.map((w, index)=>(
-          <div className="flex flex-col align-center text-center" key={index}>
-          <p className="text-zinc-400 text-[0.3rem]">{dateFormat(new Date(w.time))}</p>
-          <img src={Clear} width={SIZE_SMALL} height={SIZE_SMALL} />
-          <p className="text-[0.3rem]">{w.temperatureMax}°</p>
-          <div className="flex">
-          <img src={Raindrop} width={SIZE_XSMALL}/><p className="text-[0.3rem]">{w.percipitationMax}%</p>
-          </div>
-          </div>
-        ))
-      }
+          {
+            weather.future.map((w, index) => (
+              <div className="flex flex-col align-center text-center" key={index}>
+                <p className="text-zinc-400 text-[0.3rem]">{dateFormat(new Date(w.time))}</p>
+                <img src={wmosTsvg[w.wmos]} width={SIZE_SMALL} height={SIZE_SMALL} alt="Weather icon" />
+                <p className="text-[0.3rem]">{w.temperatureMax}°</p>
+                <div className="flex">
+                  <img src={Raindrop} width={SIZE_XSMALL} alt="Raindrop icon"/><p className="text-[0.3rem]">{w.percipitationMax}%</p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
       </div>
-      </div>
-  )
+    )
     :
-  (<img src={NotAvabile} width={SIZE_LARGE} />)
+    (<img src={NotAvabile} width={SIZE_LARGE} alt="N/A"/>)
 }
